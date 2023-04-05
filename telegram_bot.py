@@ -1,7 +1,7 @@
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
 
-from pysyun_conversation_flow.dialog_state_machine import DialogStateMachineBuilder
+from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 
 
 class TelegramBot:

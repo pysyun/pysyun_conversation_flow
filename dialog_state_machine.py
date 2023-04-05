@@ -2,7 +2,7 @@ import re
 
 from graphviz import Digraph
 
-from pysyun_conversation_flow.redux import Store
+from pysyun.conversation.flow.redux import Store
 from Levenshtein import distance
 
 

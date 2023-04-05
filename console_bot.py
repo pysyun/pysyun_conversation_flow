@@ -1,5 +1,5 @@
 import asyncio
-from pysyun_conversation_flow.dialog_state_machine import DialogStateMachineBuilder
+from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 
 
 class ConsoleBot:

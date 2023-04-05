@@ -6,7 +6,7 @@ setup(
     description='Syun\'s Python SDK for conversation flow control.',
     author='Py Syun',
     author_email='pysyun@vitche.com',
-    py_modules=['console_bot', 'dialog_state_machine',
-                'redux', 'telegram_bot'],
+    py_modules=['pysyun.conversation.flow.console_bot', 'pysyun.conversation.flow.dialog_state_machine',
+                'pysyun.conversation.flow.redux', 'pysyun.conversation.flow.telegram_bot'],
     install_requires=['asyncio', 'Levenshtein', 'telegram', 'python-telegram-bot', 'graphviz']
 )

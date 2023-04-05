@@ -34,26 +34,26 @@ class ConsoleBot:
 
         return transition
 
-    def run(self):
-        async def on_command():
-            while True:
-                user_input = await asyncio.get_event_loop().run_in_executor(None, input)
-                await self.state_machine.process({
-                    "update": {
-                        "effective_chat": {
-                            # Consider that the console is identified by a constant chat identifier
-                            "id": 0,
-                            # Consider that all console chats are private
-                            "type": "private"
-                        },
-                        "message": {
-                            "from_user": {
-                                # Consider that the console user is constant
-                                "id": 0
-                            }
-                        }
+    async def on_command(self):
+        while True:
+            user_input = await asyncio.get_event_loop().run_in_executor(None, input)
+            await self.state_machine.process({
+                "update": {
+                    "effective_chat": {
+                        # Consider that the console is identified by a constant chat identifier
+                        "id": 0,
+                        # Consider that all console chats are private
+                        "type": "private"
                     },
-                    "text": user_input
-                })
+                    "message": {
+                        "from_user": {
+                            # Consider that the console user is constant
+                            "id": 0
+                        }
+                    }
+                },
+                "text": user_input
+            })
 
-        asyncio.run(on_command())
+    def run(self):
+        asyncio.run(self.on_command())

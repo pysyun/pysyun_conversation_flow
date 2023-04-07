@@ -62,7 +62,9 @@ class DialogStateMachine:
     def to_graphviz(self):
         g = Digraph('G')
         for node in self.graph:
-            g.edge(str(node.identifier), str(node.to_state))
+            label = node.regex if node.regex and node.regex is not "8---" else node.example
+            g.edge(str(node.identifier), str(node.to_state), label=label)
+
         return g.source
 
 

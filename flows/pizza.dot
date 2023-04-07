@@ -1,15 +1,15 @@
 digraph G {
- "/start" -> "/graph"
- "/graph" -> "/start"
- "/start" -> "/main"
- "/main" -> "/order"
- "/order" -> "/custom_pizza"
- "/custom_pizza" -> "/add_to_cart"
- "/order" -> "/add_to_cart"
- "/main" -> "/view_cart"
- "/main" -> "/cancel_order"
- "/custom_pizza" -> "/order"
- "/add_to_cart" -> "/order"
- "/view_cart" -> "/main"
- "/cancel_order" -> "/start"
+ "/start" -> "/graph" [label="/graph"]
+ "/graph" -> "/start" [label="/start"]
+ "/start" -> "/main" [label="/start"]
+ "/main" -> "/order" [label="Order Pizza"]
+ "/order" -> "/custom_pizza" [label="Custom Pizza"]
+ "/custom_pizza" -> "/add_to_cart" [label="Add to Cart"]
+ "/order" -> "/add_to_cart" [label=".*"]
+ "/main" -> "/view_cart" [label="View Cart"]
+ "/main" -> "/cancel_order" [label="Cancel Order"]
+ "/custom_pizza" -> "/order" [label=Back]
+ "/add_to_cart" -> "/order" [label=Back]
+ "/view_cart" -> "/main" [label=Back]
+ "/cancel_order" -> "/start" [label="Back to Start"]
 }

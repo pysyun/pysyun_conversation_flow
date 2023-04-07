@@ -1,0 +1,15 @@
+digraph G {
+ "/start" -> "/graph"
+ "/graph" -> "/start"
+ "/start" -> "/main"
+ "/main" -> "/order"
+ "/order" -> "/custom_pizza"
+ "/custom_pizza" -> "/add_to_cart"
+ "/order" -> "/add_to_cart"
+ "/main" -> "/view_cart"
+ "/main" -> "/cancel_order"
+ "/custom_pizza" -> "/order"
+ "/add_to_cart" -> "/order"
+ "/view_cart" -> "/main"
+ "/cancel_order" -> "/start"
+}

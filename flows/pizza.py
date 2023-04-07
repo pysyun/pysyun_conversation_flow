@@ -30,6 +30,12 @@ class PizzaBot(TelegramBot):
             "Your order has been cancelled. Have a nice day!")
 
         return builder \
+            .edge(
+                "/start",
+                "/graph",
+                "/graph",
+                on_transition=self.build_graphviz_response_transition()) \
+            .edge("/graph", "/start", "/start", on_transition=main_menu_transition) \
             .edge("/start", "/main", "/start", on_transition=main_menu_transition) \
             .edge("/main", "/order", "Order Pizza", on_transition=order_pizza_transition) \
             .edge("/order", "/custom_pizza", "Custom Pizza", on_transition=custom_pizza_transition) \

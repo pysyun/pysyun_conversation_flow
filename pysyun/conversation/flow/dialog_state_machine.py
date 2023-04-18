@@ -63,7 +63,7 @@ class DialogStateMachine:
         g = Digraph('G')
         for node in self.graph:
             label = node.example
-            if "8---" is label or None is label:
+            if label == "8---" or label is None:
                 label = node.regex.pattern
             g.edge(str(node.identifier), str(node.to_state), label=label)
 
@@ -82,9 +82,9 @@ class DialogStateNode:
 
     def edge(self, action):
 
-        if re.match(self.regex, action):
+        if re.findall(self.regex, action):
             return self.to_state
-        else:
+        elif None is not self.example:
             if similarity_percentage(self.example, action) > 50:
                 return self.to_state
 

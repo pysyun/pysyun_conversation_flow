@@ -21,7 +21,7 @@ class ConsoleBot:
     @staticmethod
     def build_menu_response_transition(title, menu_items):
         async def transition(action):
-            print(action)
+            # print(action)
             print(title)
             print(menu_items)
 
@@ -34,26 +34,34 @@ class ConsoleBot:
 
         return transition
 
+
+    async def __process_user_input(self, user_input):
+        await self.state_machine.process({
+            "update": {
+                "effective_chat": {
+                    # Consider that the console is identified by a constant chat identifier
+                    "id": 0,
+                    # Consider that all console chats are private
+                    "type": "private"
+                },
+                "message": {
+                    "from_user": {
+                        # Consider that the console user is constant
+                        "id": 0
+                    }
+                }
+            },
+            "text": user_input
+        })
+
+
     async def on_command(self):
+
+        await self.__process_user_input("/start")
+
         while True:
             user_input = await asyncio.get_event_loop().run_in_executor(None, input)
-            await self.state_machine.process({
-                "update": {
-                    "effective_chat": {
-                        # Consider that the console is identified by a constant chat identifier
-                        "id": 0,
-                        # Consider that all console chats are private
-                        "type": "private"
-                    },
-                    "message": {
-                        "from_user": {
-                            # Consider that the console user is constant
-                            "id": 0
-                        }
-                    }
-                },
-                "text": user_input
-            })
+            await self.__process_user_input(user_input)
 
     def run(self):
         asyncio.run(self.on_command())

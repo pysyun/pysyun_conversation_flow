@@ -4,8 +4,16 @@ from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuil
 
 class ConsoleBotContext:
 
+    __items = {}
+
     def __init__(self, bot):
         self.bot = bot
+
+    def add(self, name, value):
+        self.__items[name] = value
+
+    def get(self, name):
+        return self.__items[name]
 
 
 class ConsoleBot:

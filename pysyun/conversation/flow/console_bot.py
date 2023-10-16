@@ -2,6 +2,12 @@ import asyncio
 from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 
 
+class ConsoleBotContext:
+
+    def __init__(self, bot):
+        self.bot = bot
+
+
 class ConsoleBot:
 
     def __init__(self, token, initial_state="/start"):
@@ -29,13 +35,14 @@ class ConsoleBot:
 
     def build_graphviz_response_transition(self):
         async def transition(action):
-            print(action)
+            # print(action)
             print(self.state_machine.to_graphviz())
 
         return transition
 
 
     async def __process_user_input(self, user_input):
+
         await self.state_machine.process({
             "update": {
                 "effective_chat": {
@@ -51,9 +58,12 @@ class ConsoleBot:
                     }
                 }
             },
-            "text": user_input
+            "text": user_input,
+            "context": ConsoleBotContext(self)
         })
 
+    async def send_message(self, chat_id, text):
+        print(text)
 
     async def on_command(self):
 

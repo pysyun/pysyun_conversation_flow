@@ -70,8 +70,10 @@ class ConsoleBot:
             "context": ConsoleBotContext(self)
         })
 
-    async def send_message(self, chat_id, text):
+    async def send_message(self, chat_id, text, reply_markup=None):
         print(text)
+        if None is not reply_markup and "keyboard" in reply_markup:
+            print(reply_markup["keyboard"])
 
     async def on_command(self):
 

@@ -1,0 +1,14 @@
+digraph G {
+	"/start" -> "/start" [label="/start"]
+	"/start" -> "/start" [label="/graph"]
+	"/start" -> "/order" [label="Order Pizza"]
+	"/order" -> "/custom_pizza" [label="Custom Pizza"]
+	"/custom_pizza" -> "/add_to_cart" [label="Add to Cart"]
+	"/order" -> "/add_to_cart" [label=".*"]
+	"/start" -> "/view_cart" [label="View Cart"]
+	"/start" -> "/cancel_order" [label="Cancel Order"]
+	"/custom_pizza" -> "/order" [label=Back]
+	"/add_to_cart" -> "/order" [label=Back]
+	"/view_cart" -> "/start" [label=Back]
+	"/cancel_order" -> "/start" [label="Back to Start"]
+}

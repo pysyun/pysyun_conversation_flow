@@ -52,8 +52,31 @@ machine = DialogStateMachineBuilder()
     .go("another input for this state", on_transition=my_action) 
     .build()
 ``` 
+**Note**: this state machine is given for reference. Do not use this internal syntax because it is the complicated for of a builder.
 
 The machine keeps track of state per user. On transitions actions can be performed via passing a callback. At any point the state machine can be visualized by calling `machine.to_graphviz()`.
+
+Below is an easier syntax to define the state machine:
+```python
+class PizzaBot(ConsoleBot):
+
+    def build_state_machine(self, builder):
+
+        return builder \
+            .edge("/start", "/start", "/start", on_transition=main_menu_transition) \
+            .edge(
+                "/start",
+                "/start",
+                "/graph",
+                on_transition=self.build_graphviz_response_transition()) \
+            .edge("/start", "/order", "Order Pizza", on_transition=order_pizza_transition) \
+            .edge("/order", "/custom_pizza", "Custom Pizza", on_transition=custom_pizza_transition) \
+            .edge("/custom_pizza", "/add_to_cart", "Add to Cart", on_transition=add_to_cart_transition) \
+```
+
+In this syntax you just call the state machine builder step-by-step to define your conversation flow.
+
+Read more about state machines [here](./documentation/state-machines.md).
 
 ## Telegram Bot Integration
 

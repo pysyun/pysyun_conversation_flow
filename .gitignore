@@ -1,5 +1,7 @@
 flows/.env
 .env
+.svn
 .idea
 *.egg-info
 .bundle.py
+__pycache__

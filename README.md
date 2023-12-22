@@ -56,6 +56,8 @@ machine = DialogStateMachineBuilder()
 
 The machine keeps track of state per user. On transitions actions can be performed via passing a callback. At any point the state machine can be visualized by calling `machine.to_graphviz()`.
 
+Read more about Graphviz [here](./documentation/graphviz.md).
+
 Below is an easier syntax to define the state machine:
 ```python
 class PizzaBot(ConsoleBot):

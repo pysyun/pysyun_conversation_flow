@@ -1,4 +1,5 @@
 flows/.env
+.env
 .idea
 *.egg-info
 .bundle.py

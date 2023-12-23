@@ -123,6 +123,8 @@ Bots can use persistence to pickle state across restarts:
 PersistentTelegramBot("token", persistence_file="data.pickle") 
 ```
 
+Read more about how persitence works in Telegram Bots [here](./documentation/telegram-persistence.md).
+
 ## Extensibility
 
 The state machine can be integrated into any conversational application by dispatching user inputs to it. The updates just need to provide user ID and text body.

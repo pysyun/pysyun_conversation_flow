@@ -80,6 +80,10 @@ In this syntax you just call the state machine builder step-by-step to define yo
 
 Read more about state machines [here](./documentation/state-machines.md).
 
+State machines on Python can be conveniently implemented using the Back-end Redux Pattern.
+
+Read more about Back-end Redux Pattern [here](./documentation/backend-redux.md).
+
 ## Telegram Bot Integration
 
 `TelegramBot` wraps the state machine and handles dispatching updates:

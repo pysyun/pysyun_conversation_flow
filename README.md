@@ -4,6 +4,8 @@ This project contains a Python library for building conversational bots using a 
 
 Out of the box integrations are provided for Telegram and command line interfaces. Custom integrations can also be built by dispatching actions to the state machine.
 
+<img src="./documentation/flow.png" style="width: 450px;" />
+
 ## Contents
 
 - [Overview](#overview)

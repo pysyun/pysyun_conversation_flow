@@ -84,6 +84,15 @@ State machines on Python can be conveniently implemented using the Back-end Redu
 
 Read more about Back-end Redux Pattern [here](./documentation/backend-redux.md).
 
+For a conversation flow, it is important to perform certain actions on different transitions.
+These actions can be:
+- Textual responses;
+- API calls;
+- Persisting data;
+- Physical interactions.
+
+Read more about implementing transition handlers [here](./documentation/transitions.md).
+
 ## Telegram Bot Integration
 
 `TelegramBot` wraps the state machine and handles dispatching updates:

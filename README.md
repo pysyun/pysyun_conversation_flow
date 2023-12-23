@@ -104,6 +104,8 @@ bot = ConsoleBot("token", initial_state)
 bot.run()
 ```
 
+Read more about what is a CLI Bot [here](./documentation/cli-bots.md).
+
 ## Persistence
 
 Bots can use persistence to pickle state across restarts:

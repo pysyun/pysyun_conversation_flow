@@ -1,4 +1,6 @@
 import os
+import asyncio
+import threading
 
 from dotenv import load_dotenv
 
@@ -18,4 +20,16 @@ class DrainBot(DrainTelegramBot):
             .edge("/start", "/start", "/start", on_transition=main_menu_transition)
 
 
-DrainBot(os.getenv('TELEGRAM_BOT_TOKEN')).run()
+bot = DrainBot(os.getenv('TELEGRAM_BOT_TOKEN'))
+
+
+def run_timer_thread():
+    while True:
+        asyncio.run(bot.process({}))
+
+
+if __name__ == "__main__":
+    main_thread = threading.Thread(target=run_timer_thread)
+    main_thread.start()
+
+    bot.run()

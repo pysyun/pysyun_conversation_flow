@@ -1,6 +1,7 @@
 import os
 import asyncio
 import threading
+import time
 
 from dotenv import load_dotenv
 
@@ -25,7 +26,17 @@ bot = DrainBot(os.getenv('TELEGRAM_BOT_TOKEN'))
 
 def run_timer_thread():
     while True:
-        asyncio.run(bot.process({}))
+        asyncio.run(bot.process({
+            "text": "Hello, Drain!",
+            "update": {
+                "message": {
+                    "from_user": {
+                        "id": 0
+                    }
+                }
+            }
+        }))
+        time.sleep(1)  # Sleep for 1 second to reduce CPU load
 
 
 if __name__ == "__main__":

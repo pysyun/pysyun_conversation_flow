@@ -24,9 +24,9 @@ class TelegramBot:
     def build_menu_response_transition(title, menu_items):
         async def transition(action):
             menu = ReplyKeyboardMarkup(menu_items, resize_keyboard=True, one_time_keyboard=True)
-            await action["context"].bot.send_message(chat_id=action["update"].effective_chat.id,
-                                                     text=title,
-                                                     reply_markup=menu)
+            await action["context"]["bot"].send_message(chat_id=action["update"].effective_chat.id,
+                                                        text=title,
+                                                        reply_markup=menu)
 
         return transition
 

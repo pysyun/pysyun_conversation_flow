@@ -17,8 +17,13 @@ class DrainBot(DrainTelegramBot):
             "Welcome to Alerts Drain Bot!",
             [["Subscribe", "Unsubscribe"], ["About"]])
 
+        main_menu_transition_2 = self.build_menu_response_transition(
+            "Welcome to Alerts Drain Bot! ;)",
+            [["Subscribe", "Unsubscribe"], ["About"]])
+
         return builder \
-            .edge("/start", "/start", "/start", on_transition=main_menu_transition)
+            .edge("/start", "/start", "/start", on_transition=main_menu_transition) \
+            .edge("/start", "/start", None, r".*", on_transition=main_menu_transition_2)
 
 
 bot = DrainBot(os.getenv('TELEGRAM_BOT_TOKEN'))
@@ -31,9 +36,18 @@ def run_timer_thread():
             "update": {
                 "message": {
                     "from_user": {
+                        # TODO: Inject the user name, from whom the message should be simulated
                         "id": 0
                     }
+                },
+                "effective_chat": {
+                    # TODO: Inject the chat identifier from subscriptions to the bot
+                    "id": 0
                 }
+            },
+            "context": {
+                # TODO: Properly inject the bot instance to handle operations (from subscriptions to the bot?)
+                "bot": bot
             }
         }))
         time.sleep(1)  # Sleep for 1 second to reduce CPU load

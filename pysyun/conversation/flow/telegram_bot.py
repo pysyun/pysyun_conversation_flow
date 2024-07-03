@@ -1,6 +1,5 @@
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, MessageHandler, filters, ContextTypes
-
 from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 
 
@@ -44,6 +43,9 @@ class TelegramBot:
                 "context": context,
                 "text": update.message.text
             })
+            # Adding timestamp to users
+            timestamp = update.message.date.timestamp()
+            context.user_data[update.effective_chat.id] = {"last_message_timestamp": timestamp}
             print("Processing message", update.message.text)
 
         self.application.add_handler(

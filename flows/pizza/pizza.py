@@ -4,6 +4,7 @@ import re
 from dotenv import load_dotenv
 
 from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
+from pysyun.conversation.worker.scheduler import Scheduler
 
 load_dotenv()
 
@@ -88,4 +89,6 @@ class PizzaBot(PersistentTelegramBot):
         return {"text": label}
 
 
-PizzaBot(os.getenv('TELEGRAM_BOT_TOKEN')).run()
+scheduler = Scheduler(minutes=1, hours=0, days=0, interval=1, message="You've been inactive recently")
+
+PizzaBot(os.getenv('TELEGRAM_BOT_TOKEN'), scheduler=scheduler).run()

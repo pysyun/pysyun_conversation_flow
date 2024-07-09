@@ -2,12 +2,13 @@ from telegram.ext import PicklePersistence, Application
 
 from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 from pysyun.conversation.flow.telegram_bot import TelegramBot
-from pysyun.conversation.worker.scheduler import scheduler
+from pysyun.conversation.worker.scheduler import Scheduler
 
 
 class PersistentTelegramBot(TelegramBot):
 
-    def __init__(self, token, initial_state="/start", persistence_file="persistent_data.pickle"):
+    def __init__(self, token, scheduler: Scheduler = None,
+                 initial_state="/start", persistence_file="persistent_data.pickle"):
         self.application = Application \
             .builder() \
             .token(token) \
@@ -18,4 +19,8 @@ class PersistentTelegramBot(TelegramBot):
 
         # Scheduler setup in config.py
         # Starts the Scheduled jobs
-        scheduler.start()
+        if scheduler:
+            scheduler.application = self.application
+            scheduler.persistence_file = persistence_file
+            scheduler.start()
+

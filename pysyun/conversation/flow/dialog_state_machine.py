@@ -1,9 +1,9 @@
 import re
 
 from graphviz import Digraph
+from Levenshtein import distance
 
 from pysyun.conversation.flow.redux import Store
-from Levenshtein import distance
 
 
 def similarity_percentage(str1, str2):
@@ -18,6 +18,7 @@ class DialogStateMachine:
 
         self.graph = state_nodes
 
+        # Function to change user states
         async def reducer(state, action):
             text = None
             if isinstance(action, str):
@@ -29,16 +30,18 @@ class DialogStateMachine:
             else:
                 return state
 
-            from_user = action["update"]["message"]["from_user"]
+            from_user = action["update"]["effective_chat"]["id"]
 
             # Initial state for new negotiators
-            if from_user["id"] not in state:
-                state[from_user["id"]] = {
+            if from_user not in state:
+                state[from_user] = {
                     'observations': [],
                     'pointer': initial_state_pointer
                 }
 
-            for node in filter(lambda item: item.identifier == state[from_user["id"]]['pointer'], state_nodes):
+            for node in filter(lambda item: item.identifier == state[from_user]['pointer'] or item.is_global,
+                               state_nodes):
+
                 edge = node.edge(text)
                 if None is not edge:
 
@@ -46,8 +49,8 @@ class DialogStateMachine:
                         await node.on_transition(action)
 
                     # Next state after the transition
-                    state[from_user["id"]] = {
-                         'observations': state[from_user["id"]]['observations'] + [action],
+                    state[from_user] = {
+                         'observations': state[from_user]['observations'] + [action],
                          'pointer': edge
                     }
 
@@ -72,19 +75,20 @@ class DialogStateMachine:
 
 class DialogStateNode:
 
-    def __init__(self, identifier, to_state, example, regex, on_transition):
+    def __init__(self, identifier, to_state, example, regex, is_global, on_transition):
         # TODO: Probably, need rename to "from_state"
         self.identifier = identifier
         self.to_state = to_state
         self.example = example
         self.regex = regex
         self.on_transition = on_transition
+        self.is_global = is_global
 
     def edge(self, action):
 
         if re.findall(self.regex, action):
             return self.to_state
-        elif None is not self.example:
+        if None is not self.example:
             if similarity_percentage(self.example, action) > 50:
                 return self.to_state
 
@@ -103,13 +107,13 @@ class DialogStateMachineBuilder:
         self.current_state = node.identifier
         return self
 
-    def to(self, to_state, example, matcher=r'8---', on_transition=None):
-        self.nodes.append(DialogStateNode(self.current_state, to_state, example, matcher, on_transition))
+    def to(self, to_state, example, matcher=r'8---', is_global=False, on_transition=None):
+        self.nodes.append(DialogStateNode(self.current_state, to_state, example, matcher, is_global, on_transition))
         self.current_state = to_state
         return self
 
-    def edge(self, from_state, to_state, example, matcher=r'8---', on_transition=None):
-        self.nodes.append(DialogStateNode(from_state, to_state, example, matcher, on_transition))
+    def edge(self, from_state, to_state, example, matcher=r'8---', is_global=False, on_transition=None):
+        self.nodes.append(DialogStateNode(from_state, to_state, example, matcher, is_global, on_transition))
         self.current_state = from_state
         return self
 

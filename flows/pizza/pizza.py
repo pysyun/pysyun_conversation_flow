@@ -4,7 +4,7 @@ import re
 from dotenv import load_dotenv
 
 from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
-from pysyun.conversation.worker.scheduler import Scheduler
+from pysyun.conversation.workers.scheduler import Scheduler
 
 load_dotenv()
 
@@ -36,6 +36,8 @@ class PizzaBot(PersistentTelegramBot):
             [["Back"]])
 
         return builder \
+            .to("/start", None, matcher=re.compile("/start"), on_transition=main_menu_transition, is_global=True) \
+\
             .edge("/start", "/start", "/start", on_transition=main_menu_transition) \
             .edge(
                 "/start",
@@ -89,6 +91,7 @@ class PizzaBot(PersistentTelegramBot):
         return {"text": label}
 
 
-scheduler = Scheduler(minutes=1, hours=0, days=0, interval=1, message="You've been inactive recently")
+scheduler = Scheduler(minutes=1, hours=0, days=0, interval=1, message="You've been inactive recently",
+                      state_transition='/start')
 
 PizzaBot(os.getenv('TELEGRAM_BOT_TOKEN'), scheduler=scheduler).run()

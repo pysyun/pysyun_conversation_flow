@@ -37,8 +37,11 @@ class Scheduler:
                 self.scheduler.add_job(self.task, 'interval', minutes=self.interval)
                 self.scheduler.start()
             else:
-                raise ValueError("Message text or state_transition and state_machine are required")
+                logger_instance.critical(f"Value error: either message or "
+                                         f"state_transition not specified")
+                raise ValueError("Message text or state_transition not specified")
         else:
+            logger_instance.critical(f"Value error: persistent_file and application are required to run scheduler")
             raise ValueError("persistent_file and application are required")
 
     async def task(self):

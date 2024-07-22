@@ -75,7 +75,7 @@ class DialogStateMachine:
 
 class DialogStateNode:
 
-    def __init__(self, identifier, to_state, example, regex, is_global, on_transition):
+    def __init__(self, identifier, to_state, example, regex, on_transition, is_global=False):
         # TODO: Probably, need rename to "from_state"
         self.identifier = identifier
         self.to_state = to_state
@@ -107,13 +107,13 @@ class DialogStateMachineBuilder:
         self.current_state = node.identifier
         return self
 
-    def to(self, to_state, example, matcher=r'8---', is_global=False, on_transition=None):
-        self.nodes.append(DialogStateNode(self.current_state, to_state, example, matcher, is_global, on_transition))
+    def to(self, to_state, example, matcher=r'8---', on_transition=None, is_global=False):
+        self.nodes.append(DialogStateNode(self.current_state, to_state, example, matcher, on_transition, is_global))
         self.current_state = to_state
         return self
 
-    def edge(self, from_state, to_state, example, matcher=r'8---', is_global=False, on_transition=None):
-        self.nodes.append(DialogStateNode(from_state, to_state, example, matcher, is_global, on_transition))
+    def edge(self, from_state, to_state, example, matcher=r'8---', on_transition=None):
+        self.nodes.append(DialogStateNode(from_state, to_state, example, matcher, on_transition))
         self.current_state = from_state
         return self
 

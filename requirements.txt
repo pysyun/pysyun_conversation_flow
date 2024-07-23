@@ -1,3 +1,4 @@
+telegram
 APScheduler
 python-dotenv
 git+https://github.com/pysyun/pysyun_conversation_flow.git

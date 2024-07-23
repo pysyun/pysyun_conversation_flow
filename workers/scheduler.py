@@ -1,4 +1,4 @@
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
@@ -8,7 +8,7 @@ class Scheduler:
 
         self.state_machine = None
 
-        self.scheduler = AsyncIOScheduler()
+        self.scheduler = BackgroundScheduler()
 
         self.injected_message = injected_message
 
@@ -19,11 +19,12 @@ class Scheduler:
         self.day_of_week = day_of_week
 
     def start(self, state_machine):
+        self.state_machine = state_machine
         cron_trigger = CronTrigger(minute=self.minute, hour=self.hour, day=self.day, month=self.month,
                                    day_of_week=self.day_of_week)
 
         self.scheduler.add_job(self.process, trigger=cron_trigger)
         self.scheduler.start()
 
-    async def process(self):
+    def process(self):
         print(self.injected_message)

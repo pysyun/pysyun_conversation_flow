@@ -18,8 +18,12 @@ class ConsoleBotContext:
 
 class ConsoleBot:
 
-    def __init__(self, token, initial_state="/start"):
+    def __init__(self, token, initial_state="/start", scheduler=None):
         self.state_machine = self.build_state_machine(DialogStateMachineBuilder(initial_state=initial_state)).build()
+
+        if scheduler:
+            self.scheduler = scheduler
+            scheduler.start(self.state_machine)
 
     def build_state_machine(self, builder):
         return builder

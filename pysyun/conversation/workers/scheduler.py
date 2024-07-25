@@ -1,5 +1,6 @@
 import pickle
 from datetime import datetime, timedelta
+from venv import logger
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from telegram import User
@@ -19,6 +20,9 @@ class Scheduler:
         self.message = message
         self.state_transition = state_transition
 
+        if not self.message or not self.state_transition:
+            raise ValueError("Message text or state_transition not specified")
+
     def set_application(self, application: Application):
         self.application = application
 
@@ -30,15 +34,13 @@ class Scheduler:
 
     def start(self):
         if self.persistence_file and self.application:
-            if (self.state_transition and self.state_machine) or self.message:
-                self.scheduler.add_job(self.task, 'interval', minutes=self.interval)
-                self.scheduler.start()
-            else:
-                raise ValueError("Message text or state_transition not specified")
+            self.scheduler.add_job(self.task, 'interval', minutes=self.interval)
+            self.scheduler.start()
         else:
             raise ValueError("persistent_file and application are required")
 
     async def task(self):
+        logger.info("Starting task...")
         with open(self.persistence_file, 'rb') as file:
             data = pickle.load(file)
             users = data['user_data']

@@ -15,9 +15,7 @@ class PersistentTelegramBot(TelegramBot):
             .persistence(PicklePersistence(filepath=persistence_file)) \
             .build()
         self.state_machine = self.build_state_machine(DialogStateMachineBuilder(initial_state=initial_state)).build()
-        self.user_data = {}
 
-        # Scheduler setup in config.py
         # Starts the Scheduled jobs
         if scheduler:
             scheduler.set_application(self.application)

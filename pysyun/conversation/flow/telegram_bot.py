@@ -44,7 +44,10 @@ class TelegramBot:
                 "context": context,
                 "text": update.message.text
             })
-            print("Processing message", update.message.text)
+            # Adding timestamp to users
+            if update.effective_chat.id not in context.user_data:
+                context.user_data[update.effective_chat.id] = {}
+            context.user_data[update.effective_chat.id]["last_message_timestamp"] = update.message.date.timestamp()
 
         self.application.add_handler(
             MessageHandler(filters.TEXT | filters.COMMAND | filters.SenderChat.ALL, on_command))

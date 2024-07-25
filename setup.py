@@ -9,5 +9,5 @@ setup(
     py_modules=['pysyun.conversation.flow.console_bot', 'pysyun.conversation.flow.dialog_state_machine',
                 'pysyun.conversation.flow.redux', 'pysyun.conversation.flow.telegram_bot',
                'pysyun.conversation.flow.persistent_telegram_bot'],
-    install_requires=['asyncio', 'Levenshtein', 'telegram', 'python-telegram-bot', 'graphviz']
+    install_requires=['asyncio', 'Levenshtein', 'telegram', 'python-telegram-bot', 'graphviz', 'APScheduler']
 )

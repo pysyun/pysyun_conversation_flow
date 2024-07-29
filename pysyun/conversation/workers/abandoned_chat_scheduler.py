@@ -3,9 +3,10 @@ from datetime import datetime
 from dataclasses import dataclass
 from typing import List
 
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from telegram import User
+from telegram.constants import ChatType
 
 
 @dataclass
@@ -20,7 +21,7 @@ class AbandonedChatScheduler:
         self.application = None
         self.state_machine = None
 
-        self.scheduler = BackgroundScheduler()
+        self.scheduler = AsyncIOScheduler()
 
         self.tasks = tasks
 
@@ -60,7 +61,11 @@ class AbandonedChatScheduler:
                         await self.state_machine.process({
                             "update": {
                                 "message": {
-                                    "from_user": User(id=user_id, first_name='', is_bot=False)
+                                    "from_user": User(id=user_id, first_name='', is_bot=False),
+                                    "chat_id": chat_id,
+                                    "chat": {
+                                        "type": ChatType.PRIVATE
+                                    }
                                 },
                                 "effective_chat": {
                                     "id": chat_id

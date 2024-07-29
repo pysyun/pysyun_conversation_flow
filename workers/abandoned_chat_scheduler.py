@@ -1,22 +1,28 @@
 import asyncio
 from datetime import datetime
+from dataclasses import dataclass
+from typing import List
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from telegram import User
 
 
+@dataclass
+class ScheduledTask:
+    message: str
+    span: int
+
+
 class AbandonedChatScheduler:
 
-    def __init__(self, injected_message, span, minute='*', hour='*', day='*', month='*', day_of_week='*'):
+    def __init__(self, tasks: List[ScheduledTask], minute='*', hour='*', day='*', month='*', day_of_week='*'):
         self.application = None
         self.state_machine = None
 
         self.scheduler = BackgroundScheduler()
 
-        self.injected_message = injected_message
-
-        self.span = span
+        self.tasks = tasks
 
         self.minute = minute
         self.hour = hour
@@ -49,16 +55,17 @@ class AbandonedChatScheduler:
                 date_modified = chats[chat_id]['date_modified']
                 past_time = datetime.now().timestamp() - date_modified
 
-                if past_time > self.span:
-                    await self.state_machine.process({
-                        "update": {
-                            "message": {
-                                "from_user": User(id=user_id, first_name='', is_bot=False)
+                for task in self.tasks:
+                    if past_time > task.span:
+                        await self.state_machine.process({
+                            "update": {
+                                "message": {
+                                    "from_user": User(id=user_id, first_name='', is_bot=False)
+                                },
+                                "effective_chat": {
+                                    "id": chat_id
+                                }
                             },
-                            "effective_chat": {
-                                "id": chat_id
-                            }
-                        },
-                        "context": self.application,
-                        "text": self.injected_message
-                    })
+                            "context": self.application,
+                            "text": task.message
+                        })

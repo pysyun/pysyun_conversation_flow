@@ -20,7 +20,7 @@ class TelegramBot:
     @staticmethod
     def build_message_response_transition(message):
         async def transition(action):
-            await action["context"].bot.send_message(chat_id=action["update"].effective_chat.id, text=message)
+            await action["context"].bot.send_message(chat_id=action["update"]["effective_chat"]["id"], text=message)
 
         return transition
 

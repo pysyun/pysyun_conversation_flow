@@ -2,14 +2,14 @@ import os
 import re
 
 from dotenv import load_dotenv
+from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
 
-from pysyun.conversation.flow.console_bot import ConsoleBot
 from workers.scheduler import Scheduler
 
 load_dotenv()
 
 
-class PizzaBot(ConsoleBot):
+class PizzaBot(PersistentTelegramBot):
 
     def build_state_machine(self, builder):
         main_menu_transition = self.build_menu_response_transition(
@@ -77,5 +77,5 @@ class PizzaBot(ConsoleBot):
         return {"text": label}
 
 
-scheduler = Scheduler('/start')
+scheduler = Scheduler('/start', 30)
 PizzaBot(os.getenv('TELEGRAM_BOT_TOKEN'), scheduler=scheduler).run()

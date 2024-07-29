@@ -23,7 +23,7 @@ class ConsoleBot:
 
         if scheduler:
             self.scheduler = scheduler
-            scheduler.start(self.state_machine)
+            scheduler.start(None, self.state_machine)
 
     def build_state_machine(self, builder):
         return builder

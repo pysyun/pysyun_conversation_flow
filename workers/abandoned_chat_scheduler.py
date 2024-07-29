@@ -6,7 +6,7 @@ from apscheduler.triggers.cron import CronTrigger
 from telegram import User
 
 
-class Scheduler:
+class AbandonedChatScheduler:
 
     def __init__(self, injected_message, span, minute='*', hour='*', day='*', month='*', day_of_week='*'):
         self.application = None

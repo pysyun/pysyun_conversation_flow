@@ -4,7 +4,7 @@ import re
 from dotenv import load_dotenv
 from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
 
-from workers.scheduler import Scheduler
+from workers.abandoned_chat_scheduler import AbandonedChatScheduler
 
 load_dotenv()
 
@@ -77,5 +77,5 @@ class PizzaBot(PersistentTelegramBot):
         return {"text": label}
 
 
-scheduler = Scheduler('/start', 30)
+scheduler = AbandonedChatScheduler('/start', 30)
 PizzaBot(os.getenv('TELEGRAM_BOT_TOKEN'), scheduler=scheduler).run()

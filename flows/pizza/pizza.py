@@ -4,7 +4,7 @@ import re
 from dotenv import load_dotenv
 from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
 
-from workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
+from pysyun.conversation.workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
 
 load_dotenv()
 

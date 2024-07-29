@@ -27,7 +27,7 @@ In conversational bots, it’s common for users to leave a session midway and re
    Import the class and define the scheduled tasks. Each task can define a message to be sent and a time span in seconds after which it should be triggered if the user is inactive.
 
    ```python
-   from workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
+   from pysyun.conversation.workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
    ```
 
 2. **Define Scheduled Tasks:**
@@ -58,9 +58,10 @@ The following example demonstrates how to set up the `AbandonedChatScheduler` in
 import os
 from dotenv import load_dotenv
 from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
-from workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
+from pysyun.conversation.workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
 
 load_dotenv()
+
 
 class PizzaBot(PersistentTelegramBot):
 
@@ -85,22 +86,22 @@ class PizzaBot(PersistentTelegramBot):
         cancel_order_transition = self.build_message_response_transition(
             "Your order has been cancelled. Have a nice day!")
 
-        return builder \
-            .edge("/start", "/start", "/start", on_transition=main_menu_transition) \
+        return builder
+            .edge("/start", "/start", "/start", on_transition=main_menu_transition)
             .edge(
-                "/start",
-                "/start",
-                "/graph",
-                on_transition=self.build_graphviz_response_transition()) \
-            .edge("/start", "/order", "Order Pizza", on_transition=order_pizza_transition) \
-            .edge("/order", "/custom_pizza", "Custom Pizza", on_transition=custom_pizza_transition) \
-            .edge("/custom_pizza", "/add_to_cart", "Add to Cart", on_transition=add_to_cart_transition) \
-            .edge("/order", "/add_to_cart", ".*", on_transition=add_to_cart_transition) \
-            .edge("/start", "/view_cart", "View Cart", on_transition=view_cart_transition) \
-            .edge("/start", "/cancel_order", "Cancel Order", on_transition=cancel_order_transition) \
-            .edge("/custom_pizza", "/order", "Back", on_transition=order_pizza_transition) \
-            .edge("/add_to_cart", "/order", "Back", on_transition=order_pizza_transition) \
-            .edge("/view_cart", "/start", "Back", on_transition=main_menu_transition) \
+            "/start",
+            "/start",
+            "/graph",
+            on_transition=self.build_graphviz_response_transition())
+            .edge("/start", "/order", "Order Pizza", on_transition=order_pizza_transition)
+            .edge("/order", "/custom_pizza", "Custom Pizza", on_transition=custom_pizza_transition)
+            .edge("/custom_pizza", "/add_to_cart", "Add to Cart", on_transition=add_to_cart_transition)
+            .edge("/order", "/add_to_cart", ".*", on_transition=add_to_cart_transition)
+            .edge("/start", "/view_cart", "View Cart", on_transition=view_cart_transition)
+            .edge("/start", "/cancel_order", "Cancel Order", on_transition=cancel_order_transition)
+            .edge("/custom_pizza", "/order", "Back", on_transition=order_pizza_transition)
+            .edge("/add_to_cart", "/order", "Back", on_transition=order_pizza_transition)
+            .edge("/view_cart", "/start", "Back", on_transition=main_menu_transition)
             .edge("/cancel_order", "/start", "Back to Start", on_transition=main_menu_transition)
 
     def build_menu_response_transition(self, title, menu_items):

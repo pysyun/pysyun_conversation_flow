@@ -29,7 +29,7 @@ class DialogStateMachine:
             else:
                 return state
 
-            from_user = action["update"]["message"]["from_user"]
+            from_user = action["update"]["effective_user"]
 
             # Initial state for new negotiators
             if from_user["id"] not in state:

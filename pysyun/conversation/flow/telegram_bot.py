@@ -1,5 +1,5 @@
-from telegram import Update, ReplyKeyboardMarkup
-from telegram.ext import Application, MessageHandler, filters, ContextTypes
+from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import Application, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
 from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
 
@@ -34,6 +34,27 @@ class TelegramBot:
 
         return transition
 
+    @staticmethod
+    def build_inline_keyboard(keyboard_data):
+        keyboard = []
+        for row in keyboard_data:
+            keyboard_row = []
+
+            for button in row:
+                text = button[0]
+                callback_data = button[1]
+
+                if callback_data is None:
+                    url = button[2]
+                    keyboard_row.append(InlineKeyboardButton(text, url=url))
+                    continue
+
+                keyboard_row.append(InlineKeyboardButton(text, callback_data=callback_data))
+
+            keyboard.append(keyboard_row)
+
+        return InlineKeyboardMarkup(keyboard)
+
     def build_graphviz_response_transition(self):
         async def transition(action):
             await action["context"].bot.send_message(chat_id=action["update"].effective_chat.id,
@@ -59,6 +80,28 @@ class TelegramBot:
                 context.user_data["chats"][update.effective_chat.id] = {}
             context.user_data["chats"][update.effective_chat.id]["date_modified"] = update.message.date.timestamp()
 
+        async def on_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
+            query = update.callback_query
+            await self.state_machine.process({
+                "update": update,
+                "context": context,
+                "text": query.data
+            })
+
+            print("Processing callback query", query.data)
+
+            # Update the list of chats to record last activity in the chat
+            if "chats" not in context.user_data:
+                context.user_data["chats"] = {}
+            if update.effective_chat.id not in context.user_data["chats"]:
+                context.user_data["chats"][update.effective_chat.id] = {}
+            context.user_data["chats"][update.effective_chat.id]["date_modified"] = (update.effective_message.date.
+                                                                                     timestamp())
+
+            await query.answer()
+
         self.application.add_handler(
             MessageHandler(filters.TEXT | filters.COMMAND | filters.SenderChat.ALL, on_command))
+        self.application.add_handler(CallbackQueryHandler(on_callback_query))
+
         self.application.run_polling()

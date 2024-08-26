@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pysyun_conversation_flow',
-    version='1.14',
+    version='1.15',
     description='Syun\'s Python SDK for conversation flow control.',
     author='Py Syun',
     author_email='pysyun@vitche.com',

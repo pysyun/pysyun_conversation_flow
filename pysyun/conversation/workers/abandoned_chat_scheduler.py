@@ -69,7 +69,8 @@ class AbandonedChatScheduler:
                                 },
                                 "effective_chat": {
                                     "id": chat_id
-                                }
+                                },
+                                "effective_user": User(id=user_id, first_name='', is_bot=False)
                             },
                             "context": self.application,
                             "text": task.message

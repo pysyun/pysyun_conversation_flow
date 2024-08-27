@@ -81,9 +81,25 @@ class TelegramBot:
             context.user_data["chats"][update.effective_chat.id]["date_modified"] = update.message.date.timestamp()
 
         async def on_callback_query(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
             query = update.callback_query
+
             await self.state_machine.process({
-                "update": update,
+                "update": {
+                    "effective_user": update["effective_user"],
+                    "effective_chat": update["effective_chat"],
+                    "message": {
+                        "text": query.data,
+                        "chat_id": update["effective_chat"]["id"],
+                        "chat": {
+                            "type": update["effective_chat"]["type"]
+                        },
+                        "from_user": {
+                            "id": update["effective_user"]["id"],
+                            "username": update["effective_user"]["username"]
+                        }
+                    }
+                },
                 "context": context,
                 "text": query.data
             })

@@ -63,6 +63,10 @@ class ConsoleBot:
                     # Consider that all console chats are private
                     "type": "private"
                 },
+                "effective_user": {
+                    # Consider that the console user is constant
+                    "id": 0
+                },
                 "message": {
                     "from_user": {
                         # Consider that the console user is constant

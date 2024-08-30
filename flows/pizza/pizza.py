@@ -2,14 +2,14 @@ import os
 import re
 
 from dotenv import load_dotenv
-from pysyun.conversation.flow.persistent_telegram_bot import PersistentTelegramBot
+from pysyun.conversation.flow.console_bot import ConsoleBot
 
 from pysyun.conversation.workers.abandoned_chat_scheduler import AbandonedChatScheduler, ScheduledTask
 
 load_dotenv()
 
 
-class PizzaBot(PersistentTelegramBot):
+class PizzaBot(ConsoleBot):
 
     def build_state_machine(self, builder):
         main_menu_transition = self.build_menu_response_transition(

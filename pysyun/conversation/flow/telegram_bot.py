@@ -1,4 +1,4 @@
-from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Application, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 
 from pysyun.conversation.flow.dialog_state_machine import DialogStateMachineBuilder
@@ -39,20 +39,20 @@ class TelegramBot:
         keyboard = []
         for row in keyboard_data:
             keyboard_row = []
-
             for button in row:
                 text = button[0]
                 callback_data = button[1]
+                url = button[2] if len(button) > 2 else None
+                web_app_url = button[3] if len(button) > 3 else None
 
-                if callback_data is None:
-                    url = button[2]
+                if web_app_url is not None:
+                    keyboard_row.append(InlineKeyboardButton(text, web_app=WebAppInfo(url=web_app_url)))
+                elif callback_data is None and url is not None:
                     keyboard_row.append(InlineKeyboardButton(text, url=url))
-                    continue
-
-                keyboard_row.append(InlineKeyboardButton(text, callback_data=callback_data))
+                else:
+                    keyboard_row.append(InlineKeyboardButton(text, callback_data=callback_data))
 
             keyboard.append(keyboard_row)
-
         return InlineKeyboardMarkup(keyboard)
 
     def build_graphviz_response_transition(self):

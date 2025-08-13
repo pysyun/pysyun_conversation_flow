@@ -13,6 +13,11 @@ class PersistentTelegramBot(TelegramBot):
             .build()
         self.state_machine = self.build_state_machine(DialogStateMachineBuilder(initial_state=initial_state)).build()
 
-        if scheduler:
+        if self.scheduler:
             self.scheduler = scheduler
-            scheduler.start(self.application, self.state_machine)
+
+        self.application.post_init = self._post_init
+
+    async def _post_init(self, application):
+        if self.scheduler:
+            self.scheduler.start(self.application, self.state_machine)
